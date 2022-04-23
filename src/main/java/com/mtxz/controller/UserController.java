@@ -51,7 +51,8 @@ public class UserController {
 //            SMSUtils.sendMessage("阿里云短信测试", "SMS_154950909", phone, code);
             //将生成的验证码保存到Session
             session.setAttribute(phone, code);
-            return R.success("手机验证码发送成功");
+//            return R.success("手机验证码发送成功");
+            return R.success(code);
         }
 
         return R.error("短信发送失败");

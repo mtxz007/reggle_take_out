@@ -68,9 +68,20 @@
                     this.form.code = ''
                     const regex = /^(13[0-9]{9})|(15[0-9]{9})|(17[0-9]{9})|(18[0-9]{9})|(19[0-9]{9})$/;
                     if (regex.test(this.form.phone)) {
-                        this.msgFlag = false
-                        //this.form.code = (Math.random()*1000000).toFixed(0)
-                        sendMsgApi({phone:this.form.phone})
+                        this.msgFlag = false;
+                        // this.form.code = (Math.random()*1000000).toFixed(0)
+                        // sendMsgApi({phone:this.form.phone})
+                        //下面这段是我改的
+                        axios({
+                            method: 'post',
+                            url: '/user/sendMsg',
+                            data: {
+                                phone:this.form.phone
+                            }
+                        }).then(res=>{
+                            console.log(res.data)
+                            this.form.code = res.data.data;
+                        })
 
                         const TIME_COUNT = 60;
                         if (!this.timer) {
@@ -99,7 +110,7 @@
                             sessionStorage.setItem("userPhone",this.form.phone)
                             window.requestAnimationFrame(()=>{
                                 window.location.href= '/front/index.html'
-                            })                           
+                            })
                         }else{
                             this.$notify({ type:'warning', message:res.msg});
                         }
