@@ -37,10 +37,13 @@ public class RedisConfig extends CachingConfigurerSupport {
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
-        template.setConnectionFactory(factory); //key 序列化方式
-        template.setKeySerializer(redisSerializer); //value 序列化
-        template.setValueSerializer(jackson2JsonRedisSerializer); //value hashmap 序列化
-        template.setHashValueSerializer(jackson2JsonRedisSerializer);
+        template.setConnectionFactory(factory);
+        //key 序列化方式
+        template.setKeySerializer(redisSerializer);
+        //value 序列化
+//        template.setValueSerializer(jackson2JsonRedisSerializer);
+        //value hashmap 序列化
+//        template.setHashValueSerializer(jackson2JsonRedisSerializer);
         return template;
     }
 
