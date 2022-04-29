@@ -9,6 +9,7 @@ import com.mtxz.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,6 +33,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 接收手机号发送验证码
@@ -48,10 +53,15 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
             log.info("code:{}", code);
             //调用阿里云API发送短信  调试慎用,0.045人民币一条!!!
-//            SMSUtils.sendMessage("阿里云短信测试", "SMS_154950909", phone, code);
+            //SMSUtils.sendMessage("阿里云短信测试", "SMS_154950909", phone, code);
+
             //将生成的验证码保存到Session
-            session.setAttribute(phone, code);
-//            return R.success("手机验证码发送成功");
+            //session.setAttribute(phone, code);
+
+            //将生成的验证码保存到redis中，有效期为5分钟
+            redisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
+
+            //return R.success("手机验证码发送成功");
             return R.success(code);
         }
 
@@ -73,7 +83,11 @@ public class UserController {
         //获取用户输入验证码
         String code = map.get("code").toString();
         //从session中获取保存的验证码
-        Object codeSession = session.getAttribute(phone);
+        //Object codeSession = session.getAttribute(phone);
+
+        //从redis中获取验证码
+        Object codeSession = redisTemplate.opsForValue().get(phone);
+
         //进行验证码的比对
         if (codeSession != null && codeSession.equals(code)) {
             //判断是否为新用户
@@ -89,6 +103,9 @@ public class UserController {
             }
             //保存登录状态
             session.setAttribute("user", user.getId());
+            //用户登录成功则删除缓存中的验证码
+            redisTemplate.delete(phone);
+
             return R.success(user);
         }
 
@@ -97,6 +114,7 @@ public class UserController {
 
     /**
      * 用户退出登录
+     *
      * @param request
      * @return
      */
