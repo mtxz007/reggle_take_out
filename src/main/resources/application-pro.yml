@@ -4,11 +4,11 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3360/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
-      password: MYSQL_password_3360
+      password: mysql123456
   redis:
     host: localhost
     port: 7963
     database: 0
-    password: REDIS_password_7963
+    # password: REDIS_password_7963
 reggie:
   path: /usr/local/app/reggle_img/
