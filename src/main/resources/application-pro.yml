@@ -9,6 +9,6 @@ spring:
     host: localhost
     port: 7963
     database: 0
-    # password: REDIS_password_7963
+    password: REDIS_password_7963
 reggie:
   path: /usr/local/app/reggle_img/
