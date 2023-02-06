@@ -133,6 +133,7 @@ public class ShoppingCartController {
         } else {
             //否则删除该数据
             shoppingCartService.remove(queryWrapper);
+            cartServiceOne.setNumber(0);
         }
 
         return R.success(cartServiceOne);
