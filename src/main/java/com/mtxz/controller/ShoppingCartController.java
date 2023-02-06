@@ -3,7 +3,6 @@ package com.mtxz.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mtxz.common.BaseContext;
 import com.mtxz.common.R;
-import com.mtxz.dto.DishDto;
 import com.mtxz.entity.ShoppingCart;
 import com.mtxz.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
@@ -109,7 +108,7 @@ public class ShoppingCartController {
      * @return
      */
     @PostMapping("/sub")
-    public R<String> sub(@RequestBody ShoppingCart shoppingCart) {
+    public R<ShoppingCart> sub(@RequestBody ShoppingCart shoppingCart) {
         log.info("shoppingCart:{}", shoppingCart);
         Long currentId = BaseContext.getCurrentId();
         //设置用户id
@@ -136,6 +135,6 @@ public class ShoppingCartController {
             shoppingCartService.remove(queryWrapper);
         }
 
-        return R.success("数量减一完成");
+        return R.success(cartServiceOne);
     }
 }
