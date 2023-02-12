@@ -133,13 +133,13 @@ public class AddressBookController {
 
     /**
      * 删除地址
-     * @param addressBook
+     * @param id
      * @return
      */
-    @DeleteMapping
-    public R<String> delete(@RequestBody AddressBook addressBook) {
-        log.info("addressBook:{}",addressBook);
-        addressBookService.removeById(addressBook.getId());
+    @DeleteMapping("/{id}")
+    public R<String> delete(@PathVariable Long id) {
+        log.info("id:{}",id);
+        addressBookService.removeById(id);
 
         return R.success("删除成功");
     }
