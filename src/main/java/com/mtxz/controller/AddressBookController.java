@@ -130,4 +130,17 @@ public class AddressBookController {
 
         return R.success(addressBook);
     }
+
+    /**
+     * 删除地址
+     * @param addressBook
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(@RequestBody AddressBook addressBook) {
+        log.info("addressBook:{}",addressBook);
+        addressBookService.removeById(addressBook.getId());
+
+        return R.success("删除成功");
+    }
 }
